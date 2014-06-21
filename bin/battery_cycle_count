@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -ue
+export PATH=/usr/bin:/usr/sbin:/bin:/sbin
+
+post_metric() {
+  metric_name="$1"
+  metric_value="$2"
+  current_time=$(date +%s)
+  printf "${metric_name}\t${metric_value}\t${current_time}\n"
+}
+
+battery_cycle_count() {
+  system_profiler SPPowerDataType | grep 'Cycle Count' | awk '{ print $3 }'
+}
+
+post_metric battery.cycle_count "$(battery_cycle_count)"
